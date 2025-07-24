@@ -7,7 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 const root = ReactDOM.createRoot(document.getElementById('root')); // Здесь ищем div#root
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/kanban-board">
       <App />
     </BrowserRouter>
   </React.StrictMode>
