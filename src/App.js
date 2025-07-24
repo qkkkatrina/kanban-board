@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Board from './components/Board';
+// import TaskDetails from './pages/TaskDetails'; // TaskDetails теперь не нужен здесь, он будет внутри Board
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+import Header from './components/Header';
+// import Footer from './components/Footer'; // Footer тоже убираем, он будет внутри Board
+
+const App = () => (
+  <div className="app">
+    <Header />
+    <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+      <Routes>
+        {/* Board будет рендериться на главной странице */}
+        <Route path="/" element={<Board />} />
+        {/* TaskDetails будет открываться как вложенный маршрут внутри Board */}
+        {/* Это позволит BoardContext быть доступным для TaskDetails */}
+        <Route path="/tasks/:id" element={<Board />} />
+      </Routes>
     </div>
-  );
-}
+    {/* Футер больше не здесь, он будет в Board */}
+  </div>
+);
 
-export default App;
+export default App

@@ -1,13 +1,376 @@
+/* Общие стили */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #F5F5F5; /* Светлый фон доски */
+    color: #333333;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header */
+.header {
+    background-color: #0079BF; /* Синий цвет как в макете */
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header__logo {
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.header__user {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.header__user:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.header__user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #F5F5F5; /* Светлый круг для аватара */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #0079BF; /* Цвет инициалов */
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.header__user-arrow {
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+}
+
+.header__user-arrow.open {
+    transform: rotate(180deg);
+}
+
+.user-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 150px;
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
+}
+
+.user-menu li {
+    padding: 10px 15px;
+    font-size: 15px;
+    color: #333333;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.user-menu li:hover {
+    background-color: #F0F0F0;
+}
+
+/* Main Board */
+.board-container {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    overflow-x: auto; /* Для горизонтального скролла на мобильных */
+}
+
+/* Column */
+.column {
+    background-color: #EBECF0; /* Серый фон колонки */
+    border-radius: 8px;
+    padding: 15px;
+    min-width: 280px;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+    flex-shrink: 0; /* Чтобы колонки не сжимались */
+    max-height: calc(100vh - 120px); /* Чтобы колонки не были слишком длинными */
+    overflow-y: auto;
+}
+
+.column__title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #172B4D;
+    text-transform: uppercase; /* В макете они капсом */
+}
+
+.column__tasks {
+    flex-grow: 1;
+    min-height: 10px; /* Чтобы пустой список не схлопывался полностью */
+}
+
+/* Task Card */
+.task-card {
+    background-color: white;
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+    font-size: 15px;
+    cursor: pointer;
+    word-wrap: break-word; /* Чтобы текст переносился */
+    transition: background-color 0.2s ease;
+}
+
+.task-card:hover {
+    background-color: #F4F5F7;
+}
+
+/* Add Card Button */
+.add-card-btn {
+    margin-top: 10px;
+    background-color: #5AAC44; /* Зеленая кнопка */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: left; /* Как в макете */
+}
+
+.add-card-btn:hover:not(:disabled) {
+    background-color: #61BD4F; /* Более светлый зеленый при наведении */
+}
+
+.add-card-btn:disabled {
+    background-color: #E6E6E6; /* Серый цвет для неактивной кнопки */
+    color: #A0A0A0; /* Темно-серый текст */
+    cursor: not-allowed;
+}
+
+/* Input for new task / Dropdown */
+.column__input-new-task {
+    width: calc(100% - 24px); /* Учитываем padding */
+    padding: 10px;
+    margin-bottom: 8px;
+    border: 1px solid #0079BF; /* Синяя рамка при фокусе */
+    border-radius: 4px;
+    font-size: 15px;
+    box-sizing: border-box; /* Чтобы padding не увеличивал ширину */
+    outline: none; /* Убираем дефолтный outline */
+}
+
+.column__dropdown {
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+    list-style: none;
+    padding: 0;
+    margin-bottom: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.column__dropdown-item {
+    padding: 10px 12px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.column__dropdown-item:hover {
+    background-color: #F4F5F7;
+}
+
+/* Task Details Page */
+.task-details-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Затемнение фона */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Выравнивание сверху */
+    padding-top: 50px; /* Отступ сверху */
+    z-index: 2000;
+    overflow-y: auto; /* Если контента много */
+}
+
+.task-details-modal {
+    background-color: white;
+    border-radius: 8px;
+    padding: 25px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    position: relative;
+    max-height: calc(100vh - 100px); /* Чтобы модалка не выходила за экран */
+    overflow-y: auto;
+}
+
+.task-details-modal__close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #6B778C;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.task-details-modal__close-btn:hover {
+    color: #333333;
+}
+
+.task-details-modal__title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #172B4D;
+}
+
+.task-details-modal__description {
+    width: 100%;
+    min-height: 150px;
+    padding: 10px;
+    border: 1px solid #DFE1E6;
+    border-radius: 4px;
+    font-size: 15px;
+    line-height: 1.5;
+    resize: vertical; /* Разрешить изменение размера по вертикали */
+    box-sizing: border-box;
+    outline: none;
+    font-family: 'Roboto', sans-serif;
+}
+
+.task-details-modal__description:focus {
+    border-color: #0079BF;
+    box-shadow: 0 0 0 2px rgba(0, 121, 191, 0.2);
+}
+
+.task-details-modal__save-btn {
+    background-color: #0079BF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.2s ease;
+}
+
+.task-details-modal__save-btn:hover {
+    background-color: #026AA7;
+}
+
+/* Footer */
+.footer {
+    background-color: #F0F0F0; /* Светло-серый фон */
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #555555;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between; /* Распределение элементов */
+    align-items: center;
+    flex-wrap: wrap; /* Для адаптивности */
+    gap: 10px; /* Отступ между элементами */
+}
+
+.footer__info {
+    flex-basis: auto;
+}
+.footer__author {
+    flex-basis: auto;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .header {
+        padding: 10px 15px;
+    }
+    .header__logo {
+        font-size: 20px;
+    }
+    .header__user {
+        font-size: 14px;
+        padding: 4px 8px;
+    }
+    .header__user-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .board-container {
+        padding: 15px;
+        flex-direction: row; /* Остаются в ряд для скролла */
+        flex-wrap: nowrap;
+    }
+    .column {
+        min-width: 260px;
+        max-width: 90%; /* Ограничение ширины для мобильных */
+    }
+
+    .task-details-modal {
+        width: 95%;
+        padding: 20px;
+        margin-top: 20px;
+        padding-top: 50px; /* Учитываем кнопку закрытия */
+    }
+    .task-details-modal__title {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    .task-details-modal__description {
+        min-height: 120px;
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 5px;
+        padding: 10px 15px;
+    }
 }
